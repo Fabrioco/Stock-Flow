@@ -1,0 +1,22 @@
+# dependências
+node_modules/
+
+# build
+dist
+.turbo
+
+# ambiente / segredos (nunca commitar)
+.env
+.env.local
+.env.test
+
+# testes
+coverage
+playwright-report
+test-results
+
+# sistema e editor
+.DS_Store
+*.log
+.vscode/*
+!.vscode/settings.json

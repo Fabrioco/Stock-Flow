@@ -1,0 +1,5 @@
+{
+  "name": "stockflow",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"]
+}
