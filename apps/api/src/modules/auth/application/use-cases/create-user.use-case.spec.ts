@@ -32,11 +32,11 @@ describe('CreateUserUseCase', () => {
     const user: User = await useCase.execute({
       name: 'John Dow',
       email: 'teste@teste.com',
-      passwordHash: 'Lopes100503',
+      password: 'Lopes100503',
     });
 
     expect(user.email).toBe('teste@teste.com');
-    expect(user.passwordHash).not.toBe('Lopes100503');
+    expect(user.password).not.toBe('Lopes100503');
   });
 
   it('should show email already in use', async () => {
@@ -44,14 +44,14 @@ describe('CreateUserUseCase', () => {
     await useCase.execute({
       name: 'user teste',
       email,
-      passwordHash: 'teste123',
+      password: 'teste123',
     });
 
     await expect(
       useCase.execute({
         name: 'user teste',
         email,
-        passwordHash: 'teste123',
+        password: 'teste123',
       }),
     ).rejects.toThrow(EmailAlreadyInUseError);
   });

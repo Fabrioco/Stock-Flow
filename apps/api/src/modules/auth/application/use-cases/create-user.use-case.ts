@@ -14,12 +14,12 @@ export class CreateUserUseCase {
       throw new EmailAlreadyInUseError(input.email);
     }
 
-    const passwordHash = await argon2.hash(input.passwordHash);
+    const passwordHash = await argon2.hash(input.password);
 
     const user = User.create({
       name: input.name,
       email: input.email,
-      passwordHash,
+      password: passwordHash,
     });
 
     await this.auth.save(user);
