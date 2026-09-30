@@ -1,7 +1,7 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { PrismaService } from '../src/prisma/prisma.service';
+import { PrismaService } from '../src/prisma/prisma.service.js';
 import { Test } from '@nestjs/testing';
-import { AppModule } from '../src/app.module';
+import { AppModule } from '../src/app.module.js';
 import request from 'supertest';
 
 describe('POST /auth/register (E2E)', () => {
@@ -41,7 +41,7 @@ describe('POST /auth/register (E2E)', () => {
       .send({
         name: 'Fabrício Lopes',
         email: 'fabricio@stockflow.dev',
-        passwordHash: 'Lopes100503',
+        password: 'Lopes100503',
       })
       .expect(201);
 
