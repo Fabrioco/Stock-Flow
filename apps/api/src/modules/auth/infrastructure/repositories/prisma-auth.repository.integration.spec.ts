@@ -2,7 +2,7 @@ import { PrismaService } from '../../../../prisma/prisma.service.js';
 import { PrismaUserRepository } from './prisma-auth.repository.js';
 import { CreateUserUseCase } from '../../application/use-cases/create-user.use-case.js';
 
-describe('CreateUserCase (integration)', () => {
+describe('PrismaAuthRepository (integration)', () => {
   let prisma: PrismaService;
   let repository: PrismaUserRepository;
   let useCase: CreateUserUseCase;
@@ -24,13 +24,13 @@ describe('CreateUserCase (integration)', () => {
     const user = await useCase.execute({
       name: 'Fabrício Lopes',
       email: 'fabricio@test.com',
-      passwordHash: 'Lopes100503',
+      password: 'Lopes100503',
     });
     const saved = await repository.findByEmail('fabricio@test.com');
 
     expect(saved).not.toBeNull();
     expect(saved?.id).toBe(user.id);
     expect(saved?.email).toBe('fabricio@test.com');
-    expect(saved?.passwordHash).not.toBe('Lopes100503');
+    expect(saved?.password).not.toBe('Lopes100503');
   });
 });
