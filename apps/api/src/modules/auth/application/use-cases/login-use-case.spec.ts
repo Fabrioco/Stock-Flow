@@ -1,9 +1,10 @@
 import { User } from '../../domain/entities/user.entity.js';
-import {
-  CredentialsIncorrect,
-  UserNotFound,
-} from '../../domain/errors/user.errors.js';
+import { CredentialsIncorrect } from '../../domain/errors/user.errors.js';
 import { UserRepository } from '../../domain/repositories/user.repository.js';
+import {
+  TokenGenerator,
+  TokenPayload,
+} from '../../domain/services/token-generator.js';
 import { CreateUserUseCase } from './create-user.use-case.js';
 import { LoginUseCase } from './login.use-case.js';
 
@@ -18,6 +19,12 @@ class InMemoryUserRepository extends UserRepository {
   }
 }
 
+class FakeTokenGenerator extends TokenGenerator {
+  async sign(payload: TokenPayload): Promise<string> {
+    return `fake-token-for-${payload.sub}`;
+  }
+}
+
 describe('LoginUseCase', () => {
   let repository: InMemoryUserRepository;
   let loginUseCase: LoginUseCase;
@@ -29,13 +36,11 @@ describe('LoginUseCase', () => {
     password: 'Lopes100503',
   };
 
-  beforeEach(() => {
-    repository = new InMemoryUserRepository();
-    loginUseCase = new LoginUseCase(repository);
-    createUserUseCase = new CreateUserUseCase(repository);
-  });
-
   beforeEach(async () => {
+    repository = new InMemoryUserRepository();
+    loginUseCase = new LoginUseCase(repository, new FakeTokenGenerator());
+    createUserUseCase = new CreateUserUseCase(repository); 
+
     await createUserUseCase.execute({
       name: props.name,
       email: props.email,
@@ -44,11 +49,12 @@ describe('LoginUseCase', () => {
   });
 
   it('should do login', async () => {
-    const user: User = await loginUseCase.execute({
+    const { accessToken, user } = await loginUseCase.execute({
       email: props.email,
       password: props.password,
     });
 
+    expect(accessToken).toBeDefined();
     expect(user.id).toBeDefined();
     expect(user.name).toBe(props.name);
     expect(user.email).toBe(props.email);
