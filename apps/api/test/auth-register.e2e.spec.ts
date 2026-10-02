@@ -45,10 +45,9 @@ describe('POST /auth/register (E2E)', () => {
       })
       .expect(201);
 
-    expect(response.body).toEqual({
-      id: expect.any(String),
-      name: 'Fabrício Lopes',
-      email: 'fabricio@stockflow.dev',
-    });
+    const { user } = response.body;
+    expect(user.id).toEqual(expect.any(String));
+    expect(user.name).toBe('Fabrício Lopes');
+    expect(user.email).toBe('fabricio@stockflow.dev');
   });
 });

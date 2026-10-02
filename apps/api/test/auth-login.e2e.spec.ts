@@ -49,10 +49,10 @@ describe('POST /auth/login (E2E)', () => {
         password: 'Lopes100503',
       })
       .expect(201);
-    expect(response.body).toEqual({
-      id: expect.any(String),
-      name: 'Fabrício Lopes',
-      email: 'fabricio@teste.dev',
-    });
+    const { access_token, user } = response.body;
+    expect(access_token).toBeDefined();
+    expect(user.id).toEqual(expect.any(String));
+    expect(user.name).toBe('Fabrício Lopes');
+    expect(user.email).toBe('fabricio@teste.dev');
   });
 });
