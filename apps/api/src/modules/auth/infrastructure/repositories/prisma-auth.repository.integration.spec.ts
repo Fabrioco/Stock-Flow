@@ -29,7 +29,7 @@ describe('PrismaAuthRepository (integration)', () => {
     const saved = await repository.findByEmail('fabricio@test.com');
 
     expect(saved).not.toBeNull();
-    expect(saved?.id).toBe(user.id);
+    expect(saved?.id).toBe(user.user.id);
     expect(saved?.email).toBe('fabricio@test.com');
     expect(saved?.password).not.toBe('Lopes100503');
   });
