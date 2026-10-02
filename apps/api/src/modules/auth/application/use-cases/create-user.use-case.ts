@@ -4,11 +4,19 @@ import { CreateUserProps, User } from '../../domain/entities/user.entity.js';
 import { EmailAlreadyInUseError } from '../../domain/errors/user.errors.js';
 import * as argon2 from 'argon2';
 
+interface RegisterUserOutput {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
 @Injectable()
 export class CreateUserUseCase {
   constructor(private readonly auth: UserRepository) {}
 
-  async execute(input: CreateUserProps): Promise<User> {
+  async execute(input: CreateUserProps): Promise<RegisterUserOutput> {
     const existing = await this.auth.findByEmail(input.email);
     if (existing) {
       throw new EmailAlreadyInUseError(input.email);
@@ -23,6 +31,13 @@ export class CreateUserUseCase {
     });
 
     await this.auth.save(user);
-    return user;
+
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    };
   }
 }

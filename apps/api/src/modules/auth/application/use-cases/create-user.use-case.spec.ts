@@ -2,6 +2,7 @@ import { User } from '../../domain/entities/user.entity.js';
 import { EmailAlreadyInUseError } from '../../domain/errors/user.errors.js';
 import { UserRepository } from '../../domain/repositories/user.repository.js';
 import { CreateUserUseCase } from './create-user.use-case.js';
+import { UserResponseDto } from '../../presentation/dto/user-response.dto.js';
 
 class InMemoryUserRepository extends UserRepository {
   items: User[] = [];
@@ -29,14 +30,15 @@ describe('CreateUserUseCase', () => {
   });
 
   it('should create a user', async () => {
-    const user: User = await useCase.execute({
+    const { user }: UserResponseDto = await useCase.execute({
       name: 'John Dow',
       email: 'teste@teste.com',
       password: 'Lopes100503',
     });
 
+    expect(user.id).toEqual(expect.any(String));
+    expect(user.name).toBe('John Dow');
     expect(user.email).toBe('teste@teste.com');
-    expect(user.password).not.toBe('Lopes100503');
   });
 
   it('should show email already in use', async () => {
