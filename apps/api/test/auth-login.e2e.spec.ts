@@ -49,8 +49,8 @@ describe('POST /auth/login (E2E)', () => {
         password: 'Lopes100503',
       })
       .expect(201);
-    const { access_token, user } = response.body;
-    expect(access_token).toBeDefined();
+    const { accessToken, user } = response.body;
+    expect(accessToken).toBeDefined();
     expect(user.id).toEqual(expect.any(String));
     expect(user.name).toBe('Fabrício Lopes');
     expect(user.email).toBe('fabricio@teste.dev');
