@@ -5,7 +5,7 @@ import { UserRepository } from '../../domain/repositories/user.repository.js';
 import { TokenGenerator } from '../../domain/services/token-generator.js';
 import { LoginDto } from '../../presentation/dto/login.dto.js';
 
-export interface LoginOutput {
+interface LoginOutput {
   accessToken: string;
   user: { id: string; name: string; email: string };
 }
