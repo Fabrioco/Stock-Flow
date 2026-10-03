@@ -14,7 +14,7 @@ export class PrismaUserRepository extends UserRepository {
       id: user.id,
       name: user.name,
       email: user.email,
-      passwordHash: user.passwordHash,
+      passwordHash: user.password,
     });
   }
 
@@ -26,11 +26,7 @@ export class PrismaUserRepository extends UserRepository {
       id: row.id,
       name: row.name,
       email: row.email,
-      passwordHash: row.passwordHash,
+      passwordHash: row.passwordHash, //aqui é PasswordHash porque ta no banco de dados
     });
-  }
-
-  async getAllUsers(): Promise<User[] | []> {
-    return await this.prisma.db.orm.public.User.all();
   }
 }

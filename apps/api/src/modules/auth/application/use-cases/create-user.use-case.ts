@@ -4,25 +4,40 @@ import { CreateUserProps, User } from '../../domain/entities/user.entity.js';
 import { EmailAlreadyInUseError } from '../../domain/errors/user.errors.js';
 import * as argon2 from 'argon2';
 
+interface RegisterUserOutput {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
 @Injectable()
 export class CreateUserUseCase {
   constructor(private readonly auth: UserRepository) {}
 
-  async execute(input: CreateUserProps): Promise<User> {
+  async execute(input: CreateUserProps): Promise<RegisterUserOutput> {
     const existing = await this.auth.findByEmail(input.email);
     if (existing) {
       throw new EmailAlreadyInUseError(input.email);
     }
 
-    const passwordHash = await argon2.hash(input.passwordHash);
+    const passwordHash = await argon2.hash(input.password);
 
     const user = User.create({
       name: input.name,
       email: input.email,
-      passwordHash,
+      password: passwordHash,
     });
 
     await this.auth.save(user);
-    return user;
+
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    };
   }
 }

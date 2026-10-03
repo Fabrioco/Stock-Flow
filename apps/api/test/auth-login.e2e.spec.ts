@@ -4,7 +4,7 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module.js';
 import request from 'supertest';
 
-describe('POST /auth/register (E2E)', () => {
+describe('POST /auth/login (E2E)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
@@ -35,19 +35,24 @@ describe('POST /auth/register (E2E)', () => {
     await app.close();
   });
 
-  it('should register a new user', async () => {
+  it('should do login a user', async () => {
+    await request(app.getHttpServer()).post('/auth/register').send({
+      name: 'Fabrício Lopes',
+      email: 'fabricio@teste.dev',
+      password: 'Lopes100503',
+    });
+
     const response = await request(app.getHttpServer())
-      .post('/auth/register')
+      .post('/auth/login')
       .send({
-        name: 'Fabrício Lopes',
-        email: 'fabricio@stockflow.dev',
+        email: 'fabricio@teste.dev',
         password: 'Lopes100503',
       })
       .expect(201);
-
-    const { user } = response.body;
+    const { accessToken, user } = response.body;
+    expect(accessToken).toBeDefined();
     expect(user.id).toEqual(expect.any(String));
     expect(user.name).toBe('Fabrício Lopes');
-    expect(user.email).toBe('fabricio@stockflow.dev');
+    expect(user.email).toBe('fabricio@teste.dev');
   });
 });

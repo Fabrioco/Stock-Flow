@@ -16,5 +16,5 @@ export class CreateUserDto {
   @ApiProperty({ example: 'super-secret-123', minLength: 8 })
   @IsString()
   @MinLength(8)
-  passwordHash!: string;
+  password!: string;
 }

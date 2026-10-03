@@ -6,7 +6,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export interface CreateUserProps {
   name: string;
   email: string;
-  passwordHash: string;
+  password: string;
 }
 
 export class User {
@@ -14,7 +14,7 @@ export class User {
     readonly id: string,
     readonly name: string,
     readonly email: string,
-    readonly passwordHash: string,
+    readonly password: string,
   ) {}
 
   static create(props: CreateUserProps): User {
@@ -28,7 +28,7 @@ export class User {
       throw new InvalidUserError('Invalid email format');
     }
 
-    return new User(randomUUID(), name, email, props.passwordHash);
+    return new User(randomUUID(), name, email, props.password);
   }
 
   static restore(props: {
